@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    int nextPage = Model.Page + 1;
+    int previewsPage = Model.Page - 1;
+
+}
+
+@model Result
+<label>Mostrar solo favoritos</label>
+<input id="show-only-favorites" type="checkbox" />
+
+
+<h1>Favoritos</h1>
+
+<div class="row">
+
+    @foreach (Movie movie in Model.Favorites)
+    {
+        <div class="card col-md-4">
+
+            <div class="view overlay">
+                <img class="card-img-top" src="@API.ImageBaseURL/@movie.Poster"
+                 alt="Card image cap">
+                <a href="#!">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <div class="card-body">
+
+                <h4 class="card-title">@movie.Title</h4>
+                <p class="card-text">
+                    @movie.Overview.Substring(0, 100)...
+                </p>
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">Detalles</a>
+
+            </div>
+
+        </div>
+    }
+</div>
+
+<div id="all-movies">
+
+    <h1>Todas las películas</h1>
+
+    <div class="row">
+        @foreach (Movie movie in Model.Movies)
+        {
+            <div class="card col-md-4">
+
+                <div class="view overlay">
+                    <img class="card-img-top" src="@API.ImageBaseURL/@movie.Poster"
+                 alt="Card image cap">
+                    <a href="#!">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+
+                <div class="card-body">
+
+                    <h4 class="card-title">@movie.Title</h4>
+                    <p class="card-text">
+                        @movie.Overview.Substring(0, 100)...
+                    </p>
+                    <a asp-controller="Home" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">Detalles</a>
+
+                </div>
+
+            </div>
+        }
+    </div>
+
+    <nav aria-label="...">
+        <ul class="pagination">
+            @if (Model.Page > 1)
+            {
+                <li class="page-item">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@previewsPage" class="page-link" tabindex="-1">Anterior</a>
+                </li>
+
+                <li class="page-item"><a asp-controller="Home" asp-action="Index" asp-route-page="@previewsPage" class="page-link">@previewsPage</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                </li>
+            }
+
+
+            <li class="page-item active">
+                <a asp-controller="Home" asp-action="Index" asp-route-page="@Model.Page" class="page-link">@Model.Page <span class="sr-only"></span></a>
+            </li>
+
+            @if (Model.Page < Model.TotalPages)
+            {
+                <li class="page-item"><a asp-controller="Home" asp-action="Index" asp-route-page="@nextPage" class="page-link">@nextPage</a></li>
+
+                <li class="page-item">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@nextPage" class="page-link">Siguiente</a>
+                </li>
+            }
+            else
+            {
+
+                <li class="page-item disabled">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@nextPage" class="page-link">Siguiente</a>
+                </li>
+            }
+
+
+
+
+        </ul>
+    </nav>
+
+    </div>
+<script>
+    $(document).ready(function () {
+
+    $('#show-only-favorites').change(function () {
+        debugger;
+    if($('#show-only-favorites').is(':checked')) {
+        $('#all-movies').addClass('hidden');
+    } else {
+        $('#all-movies').removeClass('hidden');
+    }
+    });
+    });
+
+</script>
